@@ -162,7 +162,17 @@ public class AtomicIntHashCounterTest {
 
     @Test
     public void testMultiThread4HighRace() throws InterruptedException, BrokenBarrierException {
-        final int threadCnt = Runtime.getRuntime().availableProcessors() - 2;
+        //final int threadCnt = Runtime.getRuntime().availableProcessors() - 2;
+        final int availableThreads = Runtime.getRuntime().availableProcessors();
+        int threadCnt;
+        if (availableThreads <= 1) {
+            throw new RuntimeException("Multithreading is not supported on this system with " +
+                    availableThreads + " available processors.");
+        } else if (availableThreads >= 2 && availableThreads <= 3) {
+            threadCnt = 2;
+        } else {
+            threadCnt = availableThreads - 2;
+        }
         final ExecutorService executor = Executors.newFixedThreadPool(threadCnt);
         int failureTimes = 0;
 //        final int testTimes = 1024 * 1024;
@@ -184,7 +194,16 @@ public class AtomicIntHashCounterTest {
 
     @Test
     public void testMultiThread4LowRace() throws InterruptedException, BrokenBarrierException {
-        final int threadCnt = Runtime.getRuntime().availableProcessors() - 2;
+        final int availableThreads = Runtime.getRuntime().availableProcessors();
+        int threadCnt;
+        if (availableThreads <= 1) {
+            throw new RuntimeException("Multithreading is not supported on this system with " +
+                    availableThreads + " available processors.");
+        } else if (availableThreads >= 2 && availableThreads <= 3) {
+            threadCnt = 2;
+        } else {
+            threadCnt = availableThreads - 2;
+        }
         final ExecutorService executor = Executors.newFixedThreadPool(threadCnt);
         int failureTimes = 0;
 //        final int testTimes = 1024 * 1024;
